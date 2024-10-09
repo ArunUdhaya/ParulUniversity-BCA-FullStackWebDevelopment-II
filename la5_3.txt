@@ -1,0 +1,15 @@
+//StudentInfo.jsp
+<html>
+<head>
+    <title>Student Info</title>
+</head>
+<body>
+    <h2>Enter Student Information</h2>
+    <form action="studentInfo" method="POST">
+        Name: <input type="text" name="name" required><br>
+        Student ID: <input type="text" name="studentId" required><br>
+        Department: <input type="text" name="department" required><br>
+        <input type="submit" value="Next">
+    </form>
+</body>
+</html>

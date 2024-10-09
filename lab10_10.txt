@@ -1,0 +1,24 @@
+//listStudents.jsp
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Roll Number</th>
+        <th>Semester</th>
+        <th>Course</th>
+        <th>Result</th>
+        <th>Actions</th>
+    </tr>
+    <s:iterator value="students">
+        <tr>
+            <td><s:property value="name" /></td>
+            <td><s:property value="rollNumber" /></td>
+            <td><s:property value="semester" /></td>
+            <td><s:property value="course" /></td>
+            <td><s:property value="result" /></td>
+            <td>
+                <a href="updateStudent?id=<s:property value='id' />">Edit</a>
+                <a href="deleteStudent?id=<s:property value='id' />">Delete</a>
+            </td>
+        </tr>
+    </s:iterator>
+</table>

@@ -1,0 +1,75 @@
+/*
+ Database Creation
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Insert some sample data
+INSERT INTO users (username, password) VALUES ('user1', 'password1');
+INSERT INTO users (username, password) VALUES ('user2', 'password2');
+*/
+
+// LoginServlet.java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
+
+public class LoginServlet extends HttpServlet {
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/your_database";
+    private static final String JDBC_USER = "your_username";
+    private static final String JDBC_PASSWORD = "your_password";
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
+                String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setString(1, username);
+                    pstmt.setString(2, password);
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            out.println("<h2>Authentication Successful</h2>");
+                        } else {
+                            out.println("<h2>Authentication Failed</h2>");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            out.println("<h2>Error: " + e.getMessage() + "</h2>");
+        }
+
+        // Display Request Headers
+        out.println("<h3>Request Headers:</h3>");
+        out.println("<table border='1'>");
+        out.println("<tr><th>Header Name</th><th>Header Value</th></tr>");
+        java.util.Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            out.println("<tr><td>" + headerName + "</td><td>" + headerValue + "</td></tr>");
+        }
+        out.println("</table>");
+
+        // Display Response Headers
+        out.println("<h3>Response Headers:</h3>");
+        out.println("<table border='1'>");
+        out.println("<tr><th>Header Name</th><th>Header Value</th></tr>");
+        for (String headerName : response.getHeaderNames()) {
+            String headerValue = response.getHeader(headerName);
+            out.println("<tr><td>" + headerName + "</td><td>" + headerValue + "</td></tr>");
+        }
+        out.println("</table>");
+    }
+}

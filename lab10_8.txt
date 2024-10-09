@@ -1,0 +1,11 @@
+public class ListStudentsAction extends ActionSupport {
+    private List<Student> students;
+    private StudentDAO studentDAO = new StudentDAO();
+
+    public String execute() {
+        students = studentDAO.listStudents();
+        return SUCCESS;
+    }
+
+    // Getters and Setters
+}

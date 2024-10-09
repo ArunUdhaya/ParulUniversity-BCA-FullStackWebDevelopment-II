@@ -1,0 +1,144 @@
+/* CREATE DATABASE student_db;
+
+USE student_db;
+
+CREATE TABLE students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT,
+    grade VARCHAR(10)
+);
+*/
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class StudentManagement {
+
+    private static final String URL = "jdbc:mysql://localhost:3306/student_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
+
+    public static void main(String[] args) {
+        createTableIfNotExists();
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("1. Insert Student");
+            System.out.println("2. Update Student");
+            System.out.println("3. Delete Student");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    insertStudent(scanner);
+                    break;
+                case 2:
+                    updateStudent(scanner);
+                    break;
+                case 3:
+                    deleteStudent(scanner);
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void createTableIfNotExists() {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement statement = connection.createStatement()) {
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS students (" +
+                    "student_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(100), " +
+                    "age INT, " +
+                    "grade VARCHAR(10))";
+            statement.execute(createTableSQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void insertStudent(Scanner scanner) {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter grade: ");
+        String grade = scanner.nextLine();
+
+        String insertSQL = "INSERT INTO students (name, age, grade) VALUES (?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, age);
+            preparedStatement.setString(3, grade);
+            preparedStatement.executeUpdate();
+            System.out.println("Student inserted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void updateStudent(Scanner scanner) {
+        System.out.print("Enter student ID to update: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter new name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter new age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter new grade: ");
+        String grade = scanner.nextLine();
+
+        String updateSQL = "UPDATE students SET name = ?, age = ?, grade = ? WHERE student_id = ?";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, age);
+            preparedStatement.setString(3, grade);
+            preparedStatement.setInt(4, studentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Student updated successfully.");
+            } else {
+                System.out.println("Student not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void deleteStudent(Scanner scanner) {
+        System.out.print("Enter student ID to delete: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        String deleteSQL = "DELETE FROM students WHERE student_id = ?";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL)) {
+            preparedStatement.setInt(1, studentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Student deleted successfully.");
+            } else {
+                System.out.println("Student not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

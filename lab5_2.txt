@@ -1,0 +1,39 @@
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+@WebServlet("/generateResult")
+public class StudentResultServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+
+        // Retrieve student marks from the request
+        int[] marks = new int[6];
+        for (int i = 0; i < 6; i++) {
+            marks[i] = Integer.parseInt(request.getParameter("subject" + (i+1)));
+        }
+
+        // Calculate result
+        boolean pass = true;
+        for (int mark : marks) {
+            if (mark < 40) {
+                pass = false;
+                break;
+            }
+        }
+
+        // Store result in session
+        HttpSession session = request.getSession();
+        session.setAttribute("marks", marks);
+        session.setAttribute("pass", pass);
+
+        // Redirect to the result page
+        response.sendRedirect("result.jsp");
+    }
+}

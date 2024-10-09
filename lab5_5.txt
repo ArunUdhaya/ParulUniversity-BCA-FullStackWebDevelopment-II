@@ -1,0 +1,38 @@
+//result.jsp
+<%@ page import="java.util.*" %>
+<html>
+<head>
+    <title>Student Result</title>
+    <style>
+        .pass {
+            color: green;
+        }
+        .fail {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Student Result</h2>
+    
+    <p>Name: <%= session.getAttribute("name") %></p>
+    <p>Student ID: <%= session.getAttribute("studentId") %></p>
+    <p>Department: <%= session.getAttribute("department") %></p>
+
+    <h3>Marks</h3>
+    <%
+        int[] marks = (int[]) session.getAttribute("marks");
+        for (int i = 0; i < marks.length; i++) {
+            out.println("Subject " + (i+1) + ": " + marks[i] + "<br>");
+        }
+
+        boolean pass = (boolean) session.getAttribute("pass");
+    %>
+
+    <h3 class="<%= pass ? "pass" : "fail" %>">
+        <%= pass ? "Congratulations! You Passed!" : "Sorry, You Failed!" %>
+    </h3>
+
+    <p>Name of Servlet: <%= request.getServletPath() %></p>
+</body>
+</html>

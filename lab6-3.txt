@@ -1,0 +1,16 @@
+//sales.jsp
+<html>
+<head>
+    <title>Calculate Sales and Commission</title>
+</head>
+<body>
+    <h2>Enter Sales Data</h2>
+    <form action="calculateServlet" method="POST">
+        Item 1 Sale: <input type="number" name="item1" min="0" required><br>
+        Item 2 Sale: <input type="number" name="item2" min="0" required><br>
+        Item 3 Sale: <input type="number" name="item3" min="0" required><br>
+        Item 4 Sale: <input type="number" name="item4" min="0" required><br>
+        <input type="submit" value="Calculate">
+    </form>
+</body>
+</html>

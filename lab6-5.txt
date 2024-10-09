@@ -1,0 +1,21 @@
+<web-app>
+    <!-- Redirect Servlet -->
+    <servlet>
+        <servlet-name>RedirectServlet</servlet-name>
+        <servlet-class>com.example.RedirectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RedirectServlet</servlet-name>
+        <url-pattern>/redirectServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Sales Calculation Servlet -->
+    <servlet>
+        <servlet-name>CalculateServlet</servlet-name>
+        <servlet-class>com.example.CalculateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalculateServlet</servlet-name>
+        <url-pattern>/calculateServlet</url-pattern>
+    </servlet-mapping>
+</web-app>

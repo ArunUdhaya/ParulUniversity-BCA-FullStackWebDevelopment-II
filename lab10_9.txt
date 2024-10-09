@@ -1,0 +1,9 @@
+//InsertStudent.jsp
+<form action="insertStudent" method="post">
+    Name: <input type="text" name="student.name" />
+    Roll Number: <input type="text" name="student.rollNumber" />
+    Semester: <input type="text" name="student.semester" />
+    Course: <input type="text" name="student.course" />
+    Result: <input type="text" name="student.result" />
+    <input type="submit" value="Submit" />
+</form>

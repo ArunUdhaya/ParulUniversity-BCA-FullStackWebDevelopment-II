@@ -1,0 +1,19 @@
+<web-app>
+    <servlet>
+        <servlet-name>StudentInfoServlet</servlet-name>
+        <servlet-class>com.example.grading.StudentInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentInfoServlet</servlet-name>
+        <url-pattern>/studentInfo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentResultServlet</servlet-name>
+        <servlet-class>com.example.grading.StudentResultServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentResultServlet</servlet-name>
+        <url-pattern>/generateResult</url-pattern>
+    </servlet-mapping>
+</web-app>

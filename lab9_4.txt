@@ -1,0 +1,49 @@
+//registration.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration</title>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+
+            let studentData = {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                email: document.getElementById("email").value,
+                course: document.getElementById("course").value
+            };
+
+            fetch('http://localhost:8080/StudentRegistrationService/api/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(studentData)
+            })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Registration Form</h1>
+    <form onsubmit="submitForm(event)">
+        <label for="firstName">First Name:</label><br>
+        <input type="text" id="firstName" name="firstName"><br><br>
+        
+        <label for="lastName">Last Name:</label><br>
+        <input type="text" id="lastName" name="lastName"><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br><br>
+        
+        <label for="course">Course:</label><br>
+        <input type="text" id="course" name="course"><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,42 @@
+//DAO Layer for hibernate operations
+public class StudentDAO {
+    private SessionFactory sessionFactory;
+
+    public StudentDAO() {
+        sessionFactory = new Configuration().configure().buildSessionFactory();
+    }
+
+    public void insertStudent(Student student) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.save(student);
+        tx.commit();
+        session.close();
+    }
+
+    public void updateStudent(Student student) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.update(student);
+        tx.commit();
+        session.close();
+    }
+
+    public void deleteStudent(int id) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        Student student = session.get(Student.class, id);
+        if (student != null) {
+            session.delete(student);
+        }
+        tx.commit();
+        session.close();
+    }
+
+    public List<Student> listStudents() {
+        Session session = sessionFactory.openSession();
+        List<Student> students = session.createQuery("FROM Student").list();
+        session.close();
+        return students;
+    }
+}

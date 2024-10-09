@@ -1,0 +1,27 @@
+//RedirectServlet.java
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/redirectServlet")
+public class RedirectServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // Get the URL entered by the user
+        String url = request.getParameter("url");
+
+        // Redirect to the specified URL
+        if (url != null && !url.trim().isEmpty()) {
+            response.sendRedirect(url);
+        } else {
+            response.getWriter().println("Invalid URL");
+        }
+    }
+}

@@ -1,0 +1,20 @@
+//struts.xml
+<struts>
+    <package name="default" extends="struts-default">
+        <action name="insertStudent" class="com.example.InsertStudentAction">
+            <result>/insertStudent.jsp</result>
+        </action>
+        
+        <action name="listStudents" class="com.example.ListStudentsAction">
+            <result>/listStudents.jsp</result>
+        </action>
+        
+        <action name="updateStudent" class="com.example.UpdateStudentAction">
+            <result>/updateStudent.jsp</result>
+        </action>
+
+        <action name="deleteStudent" class="com.example.DeleteStudentAction">
+            <result type="redirectAction">listStudents</result>
+        </action>
+    </package>
+</struts>

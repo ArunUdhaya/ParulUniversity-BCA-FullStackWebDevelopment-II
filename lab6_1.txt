@@ -1,0 +1,13 @@
+//redirect.jsp
+<html>
+<head>
+    <title>URL Redirect</title>
+</head>
+<body>
+    <h2>Enter URL for Redirection</h2>
+    <form action="redirectServlet" method="POST">
+        Enter URL: <input type="text" name="url" required><br>
+        <input type="submit" value="Go to URL">
+    </form>
+</body>
+</html>

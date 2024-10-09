@@ -1,0 +1,11 @@
+Procedure to Save the file 
+
+- WebContent/
+    - WEB-INF/
+        - tld/
+            - customtags.tld
+        - classes/
+            - com/
+                - customtags/
+                    - GreetingTag.java
+    - customTagExample.jsp

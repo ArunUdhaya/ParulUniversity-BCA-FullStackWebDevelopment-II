@@ -1,0 +1,16 @@
+//Student.java
+@Entity
+@Table(name = "student")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    
+    private String name;
+    private int rollNumber;
+    private String semester;
+    private String course;
+    private double result;
+
+    // Getters and Setters
+}

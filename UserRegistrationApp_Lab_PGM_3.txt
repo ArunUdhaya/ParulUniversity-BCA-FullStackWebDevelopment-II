@@ -1,0 +1,145 @@
+/*
+CREATE DATABASE user_registration_db;
+
+USE user_registration_db;
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    birthdate DATE,
+    email_id VARCHAR(100),
+    phone_no VARCHAR(15)
+);
+*/
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+
+public class UserRegistration {
+    private static final String URL = "jdbc:mysql://localhost:3306/user_registration_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new RegistrationForm().setVisible(true));
+    }
+}
+
+class RegistrationForm extends JFrame {
+    private JTextField nameField, emailField, phoneField;
+    private JFormattedTextField birthdateField;
+
+    public RegistrationForm() {
+        setTitle("User Registration");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(5, 2));
+
+        JLabel nameLabel = new JLabel("Name:");
+        JLabel birthdateLabel = new JLabel("Birthdate (YYYY-MM-DD):");
+        JLabel emailLabel = new JLabel("Email ID:");
+        JLabel phoneLabel = new JLabel("Phone No:");
+
+        nameField = new JTextField();
+        birthdateField = new JFormattedTextField(new SimpleDateFormat("yyyy-MM-dd"));
+        emailField = new JTextField();
+        phoneField = new JTextField();
+
+        JButton submitButton = new JButton("Submit");
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerUser();
+            }
+        });
+
+        add(nameLabel);
+        add(nameField);
+        add(birthdateLabel);
+        add(birthdateField);
+        add(emailLabel);
+        add(emailField);
+        add(phoneLabel);
+        add(phoneField);
+        add(submitButton);
+    }
+
+    private void registerUser() {
+        String name = nameField.getText();
+        String birthdate = birthdateField.getText();
+        String email = emailField.getText();
+        String phone = phoneField.getText();
+
+        try (Connection connection = DriverManager.getConnection(UserRegistration.URL, UserRegistration.USER, UserRegistration.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, birthdate, email_id, phone_no) VALUES (?, ?, ?, ?)")) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setDate(2, Date.valueOf(birthdate));
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, phone);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "User registered successfully!");
+                new UserDetailsForm().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "User registration failed!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }
+}
+
+class UserDetailsForm extends JFrame {
+    private JTextArea userDetailsArea;
+
+    public UserDetailsForm() {
+        setTitle("User Details");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        userDetailsArea = new JTextArea();
+        userDetailsArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(userDetailsArea);
+
+        add(scrollPane, BorderLayout.CENTER);
+
+        fetchUserDetails();
+    }
+
+    private void fetchUserDetails() {
+        try (Connection connection = DriverManager.getConnection(UserRegistration.URL, UserRegistration.USER, UserRegistration.PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
+
+            StringBuilder userDetails = new StringBuilder();
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("user_id");
+                String name = resultSet.getString("name");
+                Date birthdate = resultSet.getDate("birthdate");
+                String email = resultSet.getString("email_id");
+                String phone = resultSet.getString("phone_no");
+
+                userDetails.append("User ID: ").append(userId).append("\n")
+                        .append("Name: ").append(name).append("\n")
+                        .append("Birthdate: ").append(birthdate).append("\n")
+                        .append("Email ID: ").append(email).append("\n")
+                        .append("Phone No: ").append(phone).append("\n\n");
+            }
+            userDetailsArea.setText(userDetails.toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }
+}
+

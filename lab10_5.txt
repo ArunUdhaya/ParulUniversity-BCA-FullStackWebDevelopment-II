@@ -1,0 +1,11 @@
+public class InsertStudentAction extends ActionSupport {
+    private Student student;
+    private StudentDAO studentDAO = new StudentDAO();
+
+    public String execute() {
+        studentDAO.insertStudent(student);
+        return SUCCESS;
+    }
+
+    // Getters and Setters
+}

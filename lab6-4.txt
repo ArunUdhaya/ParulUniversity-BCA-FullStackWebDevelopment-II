@@ -1,0 +1,36 @@
+//CalculateServlet.java
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+@WebServlet("/calculateServlet")
+public class CalculateServlet extends HttpServlet {
+
+    private static final double COMMISSION_RATE = 0.10; // 10% commission
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // Retrieve the sales values from the request
+        double item1 = Double.parseDouble(request.getParameter("item1"));
+        double item2 = Double.parseDouble(request.getParameter("item2"));
+        double item3 = Double.parseDouble(request.getParameter("item3"));
+        double item4 = Double.parseDouble(request.getParameter("item4"));
+
+        // Calculate total sales and commission
+        double totalSales = item1 + item2 + item3 + item4;
+        double commission = totalSales * COMMISSION_RATE;
+
+        // Display the result
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<h2>Sales and Commission Calculation</h2>");
+        out.println("Total Sales: $" + totalSales + "<br>");
+        out.println("Commission (10%): $" + commission + "<br>");
+    }
+}

@@ -1,0 +1,11 @@
+public class DeleteStudentAction extends ActionSupport {
+    private int id;
+    private StudentDAO studentDAO = new StudentDAO();
+
+    public String execute() {
+        studentDAO.deleteStudent(id);
+        return SUCCESS;
+    }
+
+    // Getters and Setters
+}
